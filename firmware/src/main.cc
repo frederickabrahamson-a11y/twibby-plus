@@ -241,10 +241,17 @@ int main() {
     // DIAGNOSTIC START: Force blink D13 on GPIO 13 immediately
     gpio_init(13);
     gpio_set_dir(13, GPIO_OUT);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 6; i++) {
         gpio_put(13, i % 2);
         sleep_ms(50);
     }
+    
+    // START USB POWER EARLY
+#ifdef PICO_USB_HOST_POWER_PIN
+    gpio_init(PICO_USB_HOST_POWER_PIN);
+    gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
+    gpio_put(PICO_USB_HOST_POWER_PIN, true);
+#endif
 
     my_mutexes_init();
     gpio_pins_init();
