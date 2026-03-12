@@ -239,7 +239,7 @@ uint64_t get_unique_id() {
 }
 
 int main() {
-    set_sys_clock_khz(125000, true);
+    set_sys_clock_khz(120000, true);
     
     // DIAGNOSTIC START: Force blink D13 on GPIO 13 immediately
     gpio_init(13);
@@ -255,8 +255,14 @@ int main() {
     gpio_set_drive_strength(PICO_USB_HOST_POWER_PIN, GPIO_DRIVE_STRENGTH_12MA);
     gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
     gpio_put(PICO_USB_HOST_POWER_PIN, true);
-    sleep_ms(100); // Give boost converter time to stabilize
+    sleep_ms(100); 
 #endif
+
+    // Setup USB Data Pins for high drive strength
+    gpio_set_drive_strength(16, GPIO_DRIVE_STRENGTH_12MA);
+    gpio_set_drive_strength(17, GPIO_DRIVE_STRENGTH_12MA);
+    gpio_set_slew_rate(16, GPIO_SLEW_RATE_FAST);
+    gpio_set_slew_rate(17, GPIO_SLEW_RATE_FAST);
 
     my_mutexes_init();
     gpio_pins_init();

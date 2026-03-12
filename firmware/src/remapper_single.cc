@@ -33,8 +33,7 @@ void extra_init() {
 
     pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
     pio_cfg.pin_dp = PICO_DEFAULT_PIO_USB_DP_PIN;
-    
-    // Explicitly set alarm pool to true if needed, or stick to skip if manual task is used
+    pio_cfg.pio_id = 1; // Explicitly use PIO1 to avoid potential conflicts with PIO0
     pio_cfg.skip_alarm_pool = true;
 
     tuh_configure(BOARD_TUH_RHPORT, TUH_CFGID_RPI_PIO_USB_CONFIGURATION, &pio_cfg);
