@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Twibby
 
 ![](./imgs/cover.png)
@@ -68,3 +69,7 @@ This project builds upon [Remapper](https://github.com/jfedor2/hid-remapper), li
 
 - Huge thanks to [Jacek Fedorynski](https://github.com/jfedor2) for the original [HID Remapper](https://github.com/jfedor2/hid-remapper)
 - Inspired by real-world security workflows involving hardware tokens
+=======
+# twibby-plus
+11
+>>>>>>> 7cfb4d6774a2eaf6f4d8346bc0f3ca0fe360ec50
