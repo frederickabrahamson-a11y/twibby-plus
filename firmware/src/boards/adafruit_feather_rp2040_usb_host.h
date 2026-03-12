@@ -44,12 +44,11 @@
 // --- GPIO MASK ---
 // Exclude internal/special pins from the remapper's general GPIO pool
 // Pins excluded: 7 (BOOT), 13 (LED), 16,17 (USB), 18 (5V_EN), 20,21 (NeoPixel)
-// In addition to UART 0,1 (managed in remapper_single.cc)
+// 0 and 1 are also excluded because they are used for UART0
 #define GPIO_VALID_PINS_BASE ( \
-    (1u << 0)  | (1u << 1)  | (1u << 2)  | (1u << 3)  | \
-    (1u << 4)  | (1u << 5)  | (1u << 6)  |               \
-    (1u << 8)  | (1u << 9)  | (1u << 10) | (1u << 11) | \
-    (1u << 12) |              (1u << 14) | (1u << 15) | \
+    (1u << 2)  | (1u << 3)  | (1u << 4)  | (1u << 5)  | \
+    (1u << 6)  | (1u << 8)  | (1u << 9)  | (1u << 10) | \
+    (1u << 11) | (1u << 12) | (1u << 14) | (1u << 15) | \
     (1u << 24) | (1u << 25) | (1u << 26) | (1u << 27) | \
     (1u << 28) | (1u << 29))
 
