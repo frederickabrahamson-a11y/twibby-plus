@@ -249,8 +249,10 @@ int main() {
     // START USB POWER EARLY
 #ifdef PICO_USB_HOST_POWER_PIN
     gpio_init(PICO_USB_HOST_POWER_PIN);
+    gpio_set_drive_strength(PICO_USB_HOST_POWER_PIN, GPIO_DRIVE_STRENGTH_12MA);
     gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
     gpio_put(PICO_USB_HOST_POWER_PIN, true);
+    sleep_ms(100); // Give boost converter time to stabilize
 #endif
 
     my_mutexes_init();

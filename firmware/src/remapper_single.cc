@@ -33,9 +33,11 @@ void extra_init() {
 
     // --- Configure USB Host Power ---
 #ifdef PICO_USB_HOST_POWER_PIN
-    gpio_init(PICO_USB_HOST_POWER_PIN);
-    gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
-    gpio_put(PICO_USB_HOST_POWER_PIN, true); // Enable 5V Boost
+    if (gpio_get_dir(PICO_USB_HOST_POWER_PIN) != GPIO_OUT) {
+        gpio_init(PICO_USB_HOST_POWER_PIN);
+        gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
+    }
+    gpio_put(PICO_USB_HOST_POWER_PIN, true); // Ensure 5V Boost is ON
 #endif
 
     // --- Handle internal NeoPixel pins to prevent noise ---
@@ -74,6 +76,7 @@ void read_report(bool* new_report, bool* tick) {
 
     reports_received = false;
     tuh_task();
+    pio_usb_host_task(); // Ensure PIO host task is called for enumeration
     *new_report = reports_received;
 }
 
