@@ -238,6 +238,8 @@ uint64_t get_unique_id() {
 }
 
 int main() {
+    set_sys_clock_khz(120000, true);
+    
     // DIAGNOSTIC START: Force blink D13 on GPIO 13 immediately
     gpio_init(13);
     gpio_set_dir(13, GPIO_OUT);

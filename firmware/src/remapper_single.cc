@@ -27,29 +27,16 @@ void extra_init() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     for (int i = 0; i < 6; i++) {
         gpio_put(PICO_DEFAULT_LED_PIN, i % 2);
-        sleep_ms(100);
+        sleep_ms(50);
     }
-#endif
-
-    // --- Configure USB Host Power ---
-#ifdef PICO_USB_HOST_POWER_PIN
-    if (gpio_get_dir(PICO_USB_HOST_POWER_PIN) != GPIO_OUT) {
-        gpio_init(PICO_USB_HOST_POWER_PIN);
-        gpio_set_dir(PICO_USB_HOST_POWER_PIN, GPIO_OUT);
-    }
-    gpio_put(PICO_USB_HOST_POWER_PIN, true); // Ensure 5V Boost is ON
-#endif
-
-    // --- Handle internal NeoPixel pins to prevent noise ---
-#ifdef PICO_DEFAULT_WS2812_POWER_PIN
-    gpio_init(PICO_DEFAULT_WS2812_POWER_PIN);
-    gpio_set_dir(PICO_DEFAULT_WS2812_POWER_PIN, GPIO_OUT);
-    gpio_put(PICO_DEFAULT_WS2812_POWER_PIN, false); // Keep NeoPixel off for now
 #endif
 
     pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
     pio_cfg.pin_dp = PICO_DEFAULT_PIO_USB_DP_PIN;
+    
+    // Explicitly set alarm pool to true if needed, or stick to skip if manual task is used
     pio_cfg.skip_alarm_pool = true;
+
     tuh_configure(BOARD_TUH_RHPORT, TUH_CFGID_RPI_PIO_USB_CONFIGURATION, &pio_cfg);
     add_repeating_timer_us(-1000, manual_sof, NULL, &sof_timer);
 }
