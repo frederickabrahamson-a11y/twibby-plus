@@ -5,32 +5,21 @@
 
 // Board definition for Adafruit Feather RP2040 with USB Type-A Host
 // https://learn.adafruit.com/adafruit-feather-rp2040-with-usb-type-a-host/pinouts
-//
-// USB Host pins (not available as general GPIO):
-//   GPIO 16 - USB Host D+  (PIN_USB_HOST_DP)
-//   GPIO 17 - USB Host D-  (PIN_USB_HOST_DM)
-//   GPIO 18 - USB Host 5V Power Enable, Active High (PIN_5V_EN)
-//
-// Internal pins (intentionally excluded from valid GPIO mask):
-//   GPIO 7  - BOOT button
-//   GPIO 13 - Red LED (D13)
-//   GPIO 20 - NeoPixel Power
-//   GPIO 21 - NeoPixel data
-//
-// Default UART on this board:
-//   GPIO 0  - UART0 TX
-//   GPIO 1  - UART0 RX
 
 #ifndef _BOARDS_ADAFRUIT_FEATHER_RP2040_USB_HOST_H
 #define _BOARDS_ADAFRUIT_FEATHER_RP2040_USB_HOST_H
 
-// PIO-USB host data+ pin (D- is automatically DP+1 = GPIO17)
-#define PICO_DEFAULT_PIO_USB_DP_PIN 16
+// --- LED ---
+// The red LED (D13) is on GPIO 13
+#ifndef PICO_DEFAULT_LED_PIN
+#define PICO_DEFAULT_LED_PIN 13
+#endif
 
-// GPIO18 enables the onboard 5V boost converter powering the USB-A port
-#define PICO_USB_HOST_POWER_PIN 18
-
-// Default UART pins for this board
+// --- UART ---
+// Defaults to UART0 on GPIO 0 (TX) and GPIO 1 (RX)
+#ifndef PICO_DEFAULT_UART
+#define PICO_DEFAULT_UART 0
+#endif
 #ifndef PICO_DEFAULT_UART_TX_PIN
 #define PICO_DEFAULT_UART_TX_PIN 0
 #endif
@@ -38,12 +27,24 @@
 #define PICO_DEFAULT_UART_RX_PIN 1
 #endif
 
-// Valid user-accessible GPIO pins on this Feather.
-// Broken-out pins: 0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,24,25,26,27,28,29
-// Excluded: 7 (BOOT button), 13 (LED), 16,17 (USB Host D+/D-), 18 (5V_EN),
-//           20 (NeoPixel power), 21 (NeoPixel data)
-// Remaining: 0,1,2,3,4,5,6,8,9,10,11,12,14,15,24,25,26,27,28,29
-// Bitmask:   pins 0-31
+// --- PIO-USB HOST ---
+// USB Host D+ = GPIO16, D- = GPIO17
+#define PICO_DEFAULT_PIO_USB_DP_PIN 16
+// 5V power enabling pin for USB-A port
+#define PICO_USB_HOST_POWER_PIN 18
+
+// --- INTERNAL PINS ---
+// NeoPixel data = 21, NeoPixel power = 20
+#define PICO_DEFAULT_WS2812_PIN 21
+#define PICO_DEFAULT_WS2812_POWER_PIN 20
+
+// BOOT button = 7
+#define PICO_DEFAULT_BOOT_BUTTON_PIN 7
+
+// --- GPIO MASK ---
+// Exclude internal/special pins from the remapper's general GPIO pool
+// Pins excluded: 7 (BOOT), 13 (LED), 16,17 (USB), 18 (5V_EN), 20,21 (NeoPixel)
+// In addition to UART 0,1 (managed in remapper_single.cc)
 #define GPIO_VALID_PINS_BASE ( \
     (1u << 0)  | (1u << 1)  | (1u << 2)  | (1u << 3)  | \
     (1u << 4)  | (1u << 5)  | (1u << 6)  |               \
@@ -53,7 +54,7 @@
     (1u << 28) | (1u << 29))
 
 // --- FLASH ---
-// Adafruit Feather RP2040 with USB Host has 8MB QSPI flash (W25Q064)
+// Uses 8MB Flash. Standard W25Q080 stage2 is compatible with GD25LQ64/etc used by Adafruit.
 #define PICO_BOOT_STAGE2_CHOOSE_W25Q080 1
 
 #ifndef PICO_FLASH_SPI_CLKDIV
