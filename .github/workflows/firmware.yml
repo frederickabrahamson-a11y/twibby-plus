@@ -28,23 +28,35 @@ jobs:
         board: [twibby_rp2040, adafruit_feather_rp2040_usb_host]
     steps:
       - uses: actions/checkout@v4
-      - name: Manual Submodule Update
+      
+      - name: Force Fetch Dependencies
         run: |
-          git submodule update --init --recursive
+          # 强制补齐丢失的 SDK 和 依赖库
+          git clone --depth 1 https://github.com/raspberrypi/pico-sdk firmware/pico-sdk || true
+          git clone --depth 1 https://github.com/jfedor2/tinyusb firmware/tinyusb || true
+          git clone --depth 1 https://github.com/jfedor2/Pico-PIO-USB firmware/Pico-PIO-USB || true
+          git clone --depth 1 https://github.com/rppicomidi/usb_midi_host firmware/usb_midi_host || true
+          
+          # pico-sdk 内部也需要初始化
+          cd firmware/pico-sdk
+          git submodule update --init --depth 1
+          
       - name: Install compiler, libraries and tools
         run: |
           sudo apt update
           sudo apt install -y --no-install-recommends gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib srecord
+          
       - name: Build
         run: |
-          mkdir artifacts
-          mkdir build
+          mkdir -p artifacts
+          mkdir -p build
           cd build
           cmake -DPICO_BOARD=${{ matrix.board }} ..
-          make
+          make -j$(nproc)
           cd ..
           mv build/remapper.uf2 artifacts/${{ matrix.board }}.uf2
         working-directory: ./firmware
+        
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.board }}
