@@ -3,6 +3,7 @@
 #include "pio_usb.h"
 #include "usb_midi_host.h"
 
+#include "hardware/gpio.h"
 #include "pico/platform.h"
 #include "pico/time.h"
 
