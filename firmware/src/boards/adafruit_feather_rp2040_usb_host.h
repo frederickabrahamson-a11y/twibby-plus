@@ -61,7 +61,7 @@
 #endif
 
 #ifndef PICO_FLASH_SIZE_BYTES
-#define PICO_FLASH_SIZE_BYTES (8 * 1024 * 1024)
+#define PICO_FLASH_SIZE_BYTES (2 * 1024 * 1024)
 #endif
 
 #ifndef PICO_RP2040_B0_SUPPORTED
